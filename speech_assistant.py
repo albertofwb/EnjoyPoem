@@ -19,7 +19,6 @@ class SpeechAssistant:
         self.speech_config = speechsdk.SpeechConfig(subscription=self.speech_key, region=self.speech_region)
         self.speech_config.speech_synthesis_voice_name = self.speech_human
 
-        pygame.mixer.init()
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
@@ -57,6 +56,7 @@ class SpeechAssistant:
                     logger.error("Error details: {}".format(cancellation_details.error_details))
 
     def play_sound(self, text):
+        pygame.mixer.init()
         file_path = self.get_or_create_audio(text)
         try:
             pygame.mixer.music.load(file_path)

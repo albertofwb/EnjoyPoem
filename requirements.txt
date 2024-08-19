@@ -1,3 +1,6 @@
 openai
 azure.cognitiveservices.speech
 pygame
+pydub
+mutagen
+pillow

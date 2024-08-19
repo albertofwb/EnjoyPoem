@@ -1,4 +1,5 @@
 import logging
+import subprocess
 from logging.handlers import RotatingFileHandler
 import os
 import sys
@@ -60,3 +61,29 @@ def extended_seconds_to_hms(seconds) -> str:
         return f"{int(days):d}:{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
     else:
         return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+
+
+def open_in_file_explorer(path):
+    """
+    Open a file or directory in the default file explorer on Ubuntu.
+
+    :param path: The path to the file or directory to open.
+    :return: None
+    :raises: subprocess.CalledProcessError if the command fails to execute.
+    """
+    # Ensure the path is absolute
+    abs_path = os.path.abspath(path)
+
+    # Check if the path exists
+    if not os.path.exists(abs_path):
+        raise FileNotFoundError(f"The path '{abs_path}' does not exist.")
+
+    try:
+        # Use 'xdg-open' to open the file or directory in the default application
+        subprocess.run(['xdg-open', abs_path], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred while trying to open '{abs_path}': {e}")
+        raise
+    except FileNotFoundError:
+        print("The 'xdg-open' command was not found. This script may not be running on a system with X Windows.")
+        raise
