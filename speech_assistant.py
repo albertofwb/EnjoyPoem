@@ -30,12 +30,14 @@ class SpeechAssistant:
         hash_value = self._get_hash(text.strip())
         return os.path.join(self.output_dir, f"{hash_value}_{self.speech_human}.wav")
 
-    def get_or_create_audio(self, text):
-        file_path = self._get_file_path(text)
-        if os.path.exists(file_path):
-            logger.info(f"Using existing audio file: {file_path}")
-            return file_path
-
+    def get_or_create_audio(self, text, save_path=None):
+        if save_path is None:
+            file_path = self._get_file_path(text)
+            if os.path.exists(file_path):
+                logger.info(f"Using existing audio file: {file_path}")
+                return file_path
+        else:
+            file_path = save_path
         logger.info(f"Generating new audio file: {file_path}")
         self._generate_audio(text, file_path)
         return file_path
